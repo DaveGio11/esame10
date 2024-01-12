@@ -25,8 +25,8 @@ const WeatherResult = ({ results }) => {
                   alt="Weather Icon"
                   width="100px"
                 />
-                <Card.Text>
-                  <strong>Temperatura:</strong> {result.temperature} °C
+                <Card.Text className="text-info">
+                  <strong>{result.temperature} °C</strong>
                 </Card.Text>
                 <Card.Text>
                   <strong>Temperatura Percepita:</strong> {result.feelsLike} °C

@@ -1,7 +1,7 @@
 // DetailsPage.js
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Row, Col } from "react-bootstrap";
 
 const CityDetails = () => {
   const { city } = useParams();
@@ -16,13 +16,26 @@ const CityDetails = () => {
         const data = await response.json();
 
         // Estrai le informazioni necessarie dalle previsioni API
-        const forecastData = data.list.map((item) => ({
-          dateTime: item.dt_txt,
-          temperature: item.main.temp,
-          weatherIcon: item.weather[0].icon,
-        }));
+        const forecastData = data.list.reduce((acc, item) => {
+          const date = item.dt_txt.split(" ")[0];
 
-        setForecast(forecastData);
+          if (!acc[date]) {
+            acc[date] = {
+              date,
+              forecasts: [],
+            };
+          }
+
+          acc[date].forecasts.push({
+            time: item.dt_txt.split(" ")[1],
+            temperature: item.main.temp,
+            weatherIcon: item.weather[0].icon,
+          });
+
+          return acc;
+        }, {});
+
+        setForecast(Object.values(forecastData));
       } catch (error) {
         console.error("Errore nella richiesta di previsioni API:", error);
       }
@@ -33,22 +46,24 @@ const CityDetails = () => {
 
   return (
     <div>
-      <h1 className="text-center mt-4">Dettagli per {city}</h1>
-      <div className="text-center mx-auto mt-4">
+      <h1 className="text-center mt-4">Dettagli per: {city}</h1>
+      <div className="text-center mx-auto mt-4 fixed">
         <Link to="/">
           <Button type="button">Nuova Ricerca</Button>
         </Link>
       </div>
 
       <h2 className="text-center mt-4">Previsioni per i prossimi giorni:</h2>
-      {forecast.map((item, index) => (
-        <Card key={index} className="text-center mx-auto mb-4 w-50 my-4 bg-light bg-opacity-50 shadow">
+      {forecast.map((day, index) => (
+        <Card key={index} className="text-center mx-auto mb-4 w-25 my-4 bg-light bg-opacity-50 shadow">
           <Card.Body>
-            <Card.Title>Data e Ora: {item.dateTime}</Card.Title>
-            <Card.Text>
-              Temperatura: {item.temperature} °C{" "}
-              <img src={`http://openweathermap.org/img/wn/${item.weatherIcon}.png`} alt="Weather Icon" width="30px" />
-            </Card.Text>
+            <Card.Title>{day.date}</Card.Title>
+            {day.forecasts.map((item, i) => (
+              <Card.Text key={i} className="text-info">
+                {item.time}: {item.temperature} °C{" "}
+                <img src={`http://openweathermap.org/img/wn/${item.weatherIcon}.png`} alt="Weather Icon" width="30px" />
+              </Card.Text>
+            ))}
           </Card.Body>
         </Card>
       ))}
