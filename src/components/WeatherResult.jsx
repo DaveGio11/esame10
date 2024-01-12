@@ -6,7 +6,10 @@ const WeatherResult = ({ results }) => {
   return (
     <Container>
       {results.map((result, index) => (
-        <Card key={index} className="text-center mx-auto mb-4 w-25 my-4">
+        <Card
+          key={`${result.city}-${index}`}
+          className="text-center mx-auto mb-4 w-50 my-4 bg-light bg-opacity-50 shadow"
+        >
           <Card.Body>
             <Card.Title>Risultati per: {result.city}</Card.Title>
             {result.coordinates && (

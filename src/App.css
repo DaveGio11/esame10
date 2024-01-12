@@ -2,6 +2,14 @@
   text-align: center;
 }
 
+body {
+  background: linear-gradient(to bottom, #87ceeb, #e1fe6e);
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* margin: 0;
+  height: 100vh; */
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

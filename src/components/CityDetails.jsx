@@ -42,7 +42,7 @@ const CityDetails = () => {
 
       <h2 className="text-center mt-4">Previsioni per i prossimi giorni:</h2>
       {forecast.map((item, index) => (
-        <Card key={index} className="text-center mx-auto mb-4 w-50 my-4">
+        <Card key={index} className="text-center mx-auto mb-4 w-50 my-4 bg-light bg-opacity-50 shadow">
           <Card.Body>
             <Card.Title>Data e Ora: {item.dateTime}</Card.Title>
             <Card.Text>
